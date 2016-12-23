@@ -31,7 +31,7 @@ public class InsertPackages {
         int counter = 0;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-VT6LQFU\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
+            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
             br = new BufferedReader(new FileReader("F:\\2016 winter data\\G2F Packets.csv"));

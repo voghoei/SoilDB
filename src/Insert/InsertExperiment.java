@@ -18,17 +18,18 @@ public class InsertExperiment {
         ResultSet rs = null;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-VT6LQFU\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
+            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
+
 
             br = new BufferedReader(new FileReader("F:\\2016 winter data\\Transactions\\Greenhouse Experiment Excel.csv"));
             int counter = 0;
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
                 
-                String Name = countCurrentLine.split(",")[0].replaceAll(" ", "");
-                String FileOrigin = countCurrentLine.split(",")[3].replaceAll(" ", "");
-                String Destination = countCurrentLine.split(",")[2].replaceAll(" ", "");
+                String Name = countCurrentLine.split(",")[1].replaceAll(" ", "");
+                String FileOrigin = countCurrentLine.split(",")[0].replaceAll(" ", "");
+                String Destination = countCurrentLine.split(",")[10].replaceAll(" ", "");
                 String Block = Destination.split("-")[2];
                 String Plot = Destination.split("-")[3];
                 String Origin = Destination.split("-")[0].substring(2, 4);

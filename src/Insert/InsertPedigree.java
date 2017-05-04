@@ -29,23 +29,24 @@ public class InsertPedigree {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-VT6LQFU\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("F:\\2016 winter data\\G2F Packets.csv"));
+            br = new BufferedReader(new FileReader("E:\\Soil\\2017\\Package info\\USDA-GRIN New Packages.csv"));
             int counter = 0;
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
-                String Name = countCurrentLine.split(",")[0];
+                String Name = countCurrentLine.split(",")[1];
                 //String Alias = countCurrentLine.split(",")[6];
           
 
-                rs = statement.executeQuery("select * from Pedigree where replace(Name,' ','') = replace('" + Name + "',' ','')");
+                rs = statement.executeQuery("select ID from Pedigree where replace(Name,' ','') = replace('" + Name + "',' ','')");
                 if (rs.next()) {
+                    System.out.println(rs.getInt(1) + "   Have  ");
 
 //                    if (!Alias.replaceAll(" ", "").equals(rs.getString(3).replaceAll(" ", ""))) {
 //                        statement.executeUpdate("Update [dbo].[Pedigree1] set [Alias2] = '" + Alias.replaceAll(" ", "") + "' where ID = " + rs.getInt(1));
 //                    }
                 } else {
 //                    statement.executeUpdate("INSERT INTO [dbo].[Pedigree1] ([Name],[Alias1]) VALUES('" + Name.replaceAll(" ", "") + "','" + Alias.replaceAll(" ", "") + "' )");
-                    statement.executeUpdate("INSERT INTO [dbo].[Pedigree] ([Name],[Alias1]) VALUES('" + Name.replaceAll(" ", "") + "',null )");
+                    statement.executeUpdate("INSERT INTO [dbo].[Pedigree] ([Name],[Alias1]) VALUES('" + Name.replaceAll(" ", "") + "','"+Name+"' )");
                     counter++;
                 }
             }

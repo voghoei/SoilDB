@@ -34,12 +34,12 @@ public class InsertPackages {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("E:\\Soil\\2017\\Package info\\USDA GRIN NAM founder order.csv"));
+            br = new BufferedReader(new FileReader("E:\\Soil\\2017\\Package info\\2017 transient seed packets G2F.csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
                 String Name = countCurrentLine.split(",")[2];
                 String OrgAccession = countCurrentLine.split(",")[1].replaceAll(" ", "");
-                //String Note = countCurrentLine.split(",")[7];
+                String Note = countCurrentLine.split(",")[6];
                 String  No= countCurrentLine.split(",")[4];
                 //String Amount = countCurrentLine.split(",")[4];
                 String Query = "";
@@ -47,7 +47,7 @@ public class InsertPackages {
                 rs = statement.executeQuery("select ID from Pedigree where replace(Name,' ','') = replace('" + Name + "',' ','')");
                 if (rs.next()) {
                     String Pedigree_ID = rs.getString(1);
-                    Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Amount],[Note],[Original_Name]) VALUES(" + Pedigree_ID + ",4,'" + OrgAccession + "',GETDATE(),"+No+",null,Null,'" + Name +"')";
+                    Query = "INSERT INTO [dbo].[Package1] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Amount],[Note],[Original_Name],Discarded) VALUES(" + Pedigree_ID + ",12,'" + OrgAccession + "','2017-05-02',"+No+",null,'"+Note+"','" + Name +"',1)";
 
                     counter++;
                     statement.executeUpdate(Query);

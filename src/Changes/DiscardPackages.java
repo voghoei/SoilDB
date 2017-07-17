@@ -1,5 +1,11 @@
 package Changes;
 
+/*
+ * To Update Package as a discarded one
+ * You need the packageID 
+ * 
+ */
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;

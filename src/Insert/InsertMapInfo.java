@@ -34,20 +34,21 @@ public class InsertMapInfo {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-VT6LQFU\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("F:\\2016 winter data\\Map\\Map_GPS_Hi2_Lo2.csv"));
+            br = new BufferedReader(new FileReader("E:\\Soil\\2017\\FieldMap\\FieldMap PAT Iron Horse.csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
-                String PackageWithdrawal_ID = countCurrentLine.split(",")[1].replaceAll(" ", "");
+                String PackageWithdrawal_ID = countCurrentLine.split(",")[0].replaceAll(" ", "");
               //  String Code = countCurrentLine.split(",")[2].replaceAll(" ", "");
                 String Row = countCurrentLine.split(",")[3].replaceAll(" ", "");
-                String Range = countCurrentLine.split(",")[2].replaceAll(" ", "");
+                String Range = countCurrentLine.split(",")[4].replaceAll(" ", "");
+                String Block = countCurrentLine.split(",")[2].replaceAll(" ", "");
 //                String Lat = countCurrentLine.split(",")[1].replaceAll(" ", "");
 //                String Long = countCurrentLine.split(",")[2].replaceAll(" ", "");
               //  rs = statement.executeQuery("select [PackageWithdrawal_ID] from View_PackageWithdrawal_ForMap where replace([Code],' ','')='" + Code + "' ");
               //  if (rs.next()) {
               //      String PackageWithdrawal_ID = rs.getString(1);
-                    String Query = "insert into FieldMap1(PackageWithdrawal_ID,Row,Range) values ("+PackageWithdrawal_ID+", "+Row+","+Range+")";
-//                     String Query = "insert into FieldMap1(PackageWithdrawal_ID,Row,Range,GPS_Lat,GPS_Long) values ("+PackageWithdrawal_ID+", "+Row+","+Range+","+Lat+","+Long+")";
+                    String Query = "insert into FieldMap(PackageWithdrawal_ID,Row,Range, Block) values ("+PackageWithdrawal_ID+", "+Row+","+Range+","+Block+")";
+//                     String Query = "insert into FieldMap(PackageWithdrawal_ID,Row,Range,GPS_Lat,GPS_Long) values ("+PackageWithdrawal_ID+", "+Row+","+Range+","+Lat+","+Long+")";
                     statement.executeUpdate(Query);
                     counter++;
                // } else {

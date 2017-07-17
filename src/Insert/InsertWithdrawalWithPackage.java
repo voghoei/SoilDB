@@ -4,49 +4,51 @@
  * and open the template in the editor.
  */
 package Insert;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
-
 /**
  *
  * @author voghoei
  */
-public class InsertPackages_HaveFieldBookID {
-     public static void main(String[] args) {
+public class InsertWithdrawalWithPackage {
+     public static void main(String[] args) throws SQLException {
         String countCurrentLine;
+
         BufferedReader br = null;
         ResultSet rs = null;
-        int counter = 0;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("E:\\Soil\\2016\\Reports\\NUR_New_Pakhages 2016 (Harvest).csv"));
+
+            br = new BufferedReader(new FileReader("E:\\Soil\\2017\\Package info\\Final 2017 Summer field PAT.csv"));
+            int counter = 0;
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
-                String  Pedigree_ID = countCurrentLine.split(",")[15];
-                String  Origin_Accession = countCurrentLine.split(",")[5];
-                String  Original_Name= countCurrentLine.split(",")[0];
-                String  No= countCurrentLine.split(",")[8];
-                String  ExperimentPlot_ID= countCurrentLine.split(",")[11];
+                String Destination = countCurrentLine.split(",")[8];  
+                String Package_ID = countCurrentLine.split(",")[13]; 
+                String Note = countCurrentLine.split(",")[12];     
+                String SeedNo = countCurrentLine.split(",")[10];                            
+                int Experiment_ID = 0;
                 
-                String  Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2016-12-12','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0)";
-                
-                statement.executeUpdate(Query);   
                 counter++;
+                rs = statement.executeQuery("select Experiment_ID from View_Experiment where Destination ='"+Destination+"'");
+                if (rs.next()) {
+                    Experiment_ID = rs.getInt(1);
+                    statement.executeUpdate("INSERT INTO [dbo].[PackageWithdrawal] ([Package_ID],[Experiment_ID],[Person_ID],[Date],[SeedRemove],Note) VALUES(" + Package_ID + "," + Experiment_ID + ",1,'2017-05-02'," + SeedNo + ",'"+Note+"')");
+
+                }               
             }
             System.out.println(counter + " Rows Data Inserted");
-
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Problem Connecting!");
         }
-
-    }
+     }
 }

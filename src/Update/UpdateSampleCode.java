@@ -29,22 +29,30 @@ public class UpdateSampleCode {
         String countCurrentLine;
         BufferedReader br ;
         ResultSet rs ; 
-        int counter = 0;
+        int counter = 1;
 
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
+            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= CAGT-SAHAR-D\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("E:\\2016 winter data\\Phones\\Sampling\\Sample 2\\All chenges.csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2016\\Sampling\\Sample 2\\checked 67 .csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
-                String code1 = countCurrentLine.split(",")[0];
-                String code2 = countCurrentLine.split(",")[1];                
+                String plot = countCurrentLine.split(",")[0];
+                String code = countCurrentLine.split(",")[1];  
+                String note = countCurrentLine.split(",")[2];
                 String Query = "";
                
-                Query = "update FieldBook set Value='" + code2 + "' where Value ='"+code1+"'";
-                               
+                if (note.length()>1){
+                    Query = "update FieldBook set Value='" + code + "' ,Note = '"+note+"'  where [ID] = (SELECT ID FROM [Soil].[dbo].[View_FieldBook_Data] where Phenotype_ID in (6) and Destination='"+plot+"')";
+                
+                }
+                else{
+                    Query = "update FieldBook set Value='" + code + "' where [ID] = (SELECT ID FROM [Soil].[dbo].[View_FieldBook_Data] where Phenotype_ID in (6) and Destination='"+plot+"')";
+                
+                }
+                //System.out.println( " plot  = "+plot);        
                 if (statement.executeUpdate(Query) == 1) {
                     counter++;
                 }

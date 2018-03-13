@@ -29,15 +29,16 @@ public class InsertFieldBook {
 
         int counter = 0;
         int dublication = 0;
+        String Query ="";
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("D:\\Soil Files\\2017\\Phones\\All Data.csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2017\\Phones\\Alls\\Other Fields.csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
-                String FieldMap_ID = countCurrentLine.split(",")[1];
+                String FieldMap_ID = countCurrentLine.split(",")[5];
                 String trait = countCurrentLine.split(",")[2];
                 String Value = countCurrentLine.split(",")[3];
                 
@@ -48,7 +49,7 @@ public class InsertFieldBook {
                 // String Note = countCurrentLine.split(",")[3];
                 int year = 2017;
 
-                String Query = "select ID from Phenotype where Title = '" + trait + "'";
+                Query = "select ID from Phenotype where Title = '" + trait + "'";
                 rs = statement.executeQuery(Query);
                 if (rs.next()) {
                     String phenotype_id = rs.getString(1);
@@ -56,14 +57,16 @@ public class InsertFieldBook {
                     if (rs.next()) {
                         dublication++;
                         System.out.println(" Rows dublicated:" + FieldMap_ID + " trait: " + trait + " Date: " + sqlDateTime + " Value: " + Value + "  With  ID = " + rs.getString(1));
+                        continue;
                     } else {
-                        Query = "insert into FieldBook1(FieldMap_ID,Phenotype_ID,Value,Date) values (" + FieldMap_ID + "," + phenotype_id + ", '" + Value + "','" + sqlDateTime + "')";
+                        Query = "insert into FieldBook(FieldMap_ID,Phenotype_ID,Value,Date) values (" + FieldMap_ID + "," + phenotype_id + ", '" + Value + "','" + sqlDateTime + "')";
                     }
 
                 } else {
                     System.out.println(" Phenotype didn't find" + trait);
                     System.out.println(" Query:  " + Query);
                 }
+                
                 if (Query.length() > 1) {
                     statement.executeUpdate(Query);
                     counter++;
@@ -73,6 +76,7 @@ public class InsertFieldBook {
             System.out.println(dublication + " Rows Data Dublicated");
 
         } catch (ClassNotFoundException | SQLException | IOException | ParseException e) {
+            System.out.println("Query=  "+Query);
             System.err.println("Problem Connecting!  " + e);
         }
 

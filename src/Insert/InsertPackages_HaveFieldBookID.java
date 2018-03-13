@@ -24,19 +24,19 @@ public class InsertPackages_HaveFieldBookID {
         int counter = 0;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
+            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= CAGT-SAHAR-D\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("E:\\Soil\\2016\\Reports\\NUR_New_Pakhages 2016 (Harvest).csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2017\\Reports\\NUR_New_Pakhages 2017 (Harvest).csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
-                String  Pedigree_ID = countCurrentLine.split(",")[15];
+                String  Pedigree_ID = countCurrentLine.split(",")[12];
                 String  Origin_Accession = countCurrentLine.split(",")[5];
                 String  Original_Name= countCurrentLine.split(",")[0];
-                String  No= countCurrentLine.split(",")[8];
-                String  ExperimentPlot_ID= countCurrentLine.split(",")[11];
+                String  No= countCurrentLine.split(",")[9];
+                String  ExperimentPlot_ID= countCurrentLine.split(",")[15];
                 
-                String  Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2016-12-12','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0)";
+                String  Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2017-12-12','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0)";
                 
                 statement.executeUpdate(Query);   
                 counter++;

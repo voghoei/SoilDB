@@ -33,24 +33,24 @@ public class InsertMapInfo {
             Statement statement = conn.createStatement();
             String Query = "";
 
-            br = new BufferedReader(new FileReader("D:\\Soil Files\\2017\\FieldMap\\PL.csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2018\\FieldMap\\FieldMap.csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
                 String ExperimentPlot_ID = countCurrentLine.split(",")[0].replaceAll(" ", "");
-                String Row = countCurrentLine.split(",")[5].replaceAll(" ", "");
+                String Row = countCurrentLine.split(",")[3].replaceAll(" ", "");
                 String Range = countCurrentLine.split(",")[4].replaceAll(" ", "");
-//                String Block = countCurrentLine.split(",")[2].replaceAll(" ", "");
+                String Block = countCurrentLine.split(",")[2].replaceAll(" ", "");
 //                String Lat = countCurrentLine.split(",")[1].replaceAll(" ", "");
 //                String Long = countCurrentLine.split(",")[2].replaceAll(" ", "");
-                String Note = countCurrentLine.split(",")[3].replaceAll(" ", "");
+//                String Note = countCurrentLine.split(",")[3].replaceAll(" ", "");
                 //  rs = statement.executeQuery("select [PackageWithdrawal_ID] from View_PackageWithdrawal_ForMap where replace([Code],' ','')='" + Code + "' ");
                 //  if (rs.next()) {
                 //      String PackageWithdrawal_ID = rs.getString(1);
-                if (Note.length() > 1) {
-                    Query = "insert into FieldMap(ExperimentPlot_ID,Row,Range, Note) values (" + ExperimentPlot_ID + ", " + Row + "," + Range + ",'" + Note + "')";
-                } else {
-                    Query = "insert into FieldMap(ExperimentPlot_ID,Row,Range) values (" + ExperimentPlot_ID + ", " + Row + "," + Range + ")";
-                }
+//                if (Note.length() > 1) {
+//                    Query = "insert into FieldMap(ExperimentPlot_ID,Row,Range, Note) values (" + ExperimentPlot_ID + ", " + Row + "," + Range + ",'" + Note + "')";
+//                } else {
+                    Query = "insert into FieldMap(ExperimentPlot_ID,Row,Range,Block) values (" + ExperimentPlot_ID + ", " + Row + "," + Range + "," + Block + ")";
+//                }
 //                     String Query = "insert into FieldMap(PackageWithdrawal_ID,Row,Range,GPS_Lat,GPS_Long) values ("+PackageWithdrawal_ID+", "+Row+","+Range+","+Lat+","+Long+")";
                 statement.executeUpdate(Query);
                 counter++;

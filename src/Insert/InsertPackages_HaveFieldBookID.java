@@ -27,21 +27,26 @@ public class InsertPackages_HaveFieldBookID {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= CAGT-SAHAR-D\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-           // br = new BufferedReader(new FileReader("D:\\Soil Files\\2017\\Reports\\MiniMaze_New_Pakhages 2017 (Harvest).csv"));
-           // br.readLine();
-            //while ((countCurrentLine = br.readLine()) != null) {
-                String  Pedigree_ID = "294";//countCurrentLine.split(",")[12];
-                String  Origin_Accession = "17IH-NUR-0-0322";//countCurrentLine.split(",")[5];
-                String  Original_Name= "NC334";//countCurrentLine.split(",")[0];
-                String  No= "113";//countCurrentLine.split(",")[9];
-                String  ExperimentPlot_ID= "5394";//countCurrentLine.split(",")[15];
+           br = new BufferedReader(new FileReader("D:\\Soil Files\\2018\\Report\\NUR_Cross_New_Pakhages 2018 (Harvest).csv"));
+           br.readLine();
+            while ((countCurrentLine = br.readLine()) != null) {
+                String  Pedigree_ID = countCurrentLine.split(",")[12];//"294";
+                String  Origin_Accession = countCurrentLine.split(",")[5];//"17IH-NUR-0-0322";
+                String  Original_Name= countCurrentLine.split(",")[19]; // "NC334";
+                String  No= countCurrentLine.split(",")[9]; // "113";
+                String  ExperimentPlot_ID= countCurrentLine.split(",")[15]; //"5394";
+                String Note = countCurrentLine.split(",")[20];     
+                String  Query = "";
                 
-                String  Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2017-12-12','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0)";
+                if (Note.length()>0)
+                    Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded], [Note]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2018-10-29','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0 ,'"+Note+"')";
+                else                            
+                    Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2018-10-29','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0)";
                 
                 statement.executeUpdate(Query);   
                 System.out.println(counter + " Rows Data Inserted "+ExperimentPlot_ID);
                 counter++;
-            //}
+            }
             System.out.println(counter + " Rows Data Inserted");
 
         } catch (Exception e) {

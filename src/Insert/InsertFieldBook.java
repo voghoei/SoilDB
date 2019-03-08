@@ -35,18 +35,18 @@ public class InsertFieldBook {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("D:\\Soil Files\\2017\\Harvest\\IHF Harvest 2017.csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2018\\FieldBook\\2018_NUR_Crosses_SeedCount.csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
                 String FieldMap_ID = countCurrentLine.split(",")[0];
                 String trait = countCurrentLine.split(",")[1];
-                String Value = countCurrentLine.split(",")[2];
+                String Value = countCurrentLine.split(",")[6];
                 
-                String ExcelDate = countCurrentLine.split(",")[3];
+                String ExcelDate = countCurrentLine.split(",")[5];
                 Date DateTime = formatter.parse(ExcelDate);
                 java.sql.Timestamp sqlDateTime = new java.sql.Timestamp(DateTime.getTime());
                
-                String Note = countCurrentLine.split(",")[4];
+                String Note = countCurrentLine.split(",")[4]+" ; "+countCurrentLine.split(",")[8];
                 int year = sqlDateTime.getYear();
 
                 Query = "select ID from Phenotype where Title = '" + trait + "'";

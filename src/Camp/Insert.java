@@ -27,12 +27,12 @@ public class Insert {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= CAGT-SAHAR-D\\SQLEXPRESS;databaseName=UGA_Sample;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("D:\\Soil Files\\2017\\Sampling\\Campus\\2-19-2018.csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2019\\Sampling\\Campus\\2-19-2018.csv"));
             
             while ((countCurrentLine = br.readLine()) != null) {
-                String Name = countCurrentLine.split(",")[2].replaceAll(" ", "");
+                String Name = countCurrentLine.split(",")[3].replaceAll(" ", "");
                 String Barcode = countCurrentLine.split(",")[1].replaceAll(" ", "");
-                String Note = "";//countCurrentLine.split(",")[2];
+                String Note = countCurrentLine.split(",")[2];
                 int Sample_ID = 0;
                 String Query = "";
 
@@ -51,9 +51,9 @@ public class Insert {
                     
                 }
                 if( Note.length()>1)
-                    Query = "INSERT INTO [dbo].[Barcode] (Sample_ID, Year, SampleDate, Barcode, Note) VALUES(" + Sample_ID + ",2018,'2018-02-19','"+Barcode+"','"+Note+"')";
+                    Query = "INSERT INTO [dbo].[Barcode] (Sample_ID, Year, SampleDate, Barcode, Note) VALUES(" + Sample_ID + ",2019,'2019-02-19','"+Barcode+"','"+Note+"')";
                 else
-                    Query = "INSERT INTO [dbo].[Barcode] (Sample_ID, Year, SampleDate, Barcode) VALUES(" + Sample_ID + ",2018,'2018-02-19','"+Barcode+"')";
+                    Query = "INSERT INTO [dbo].[Barcode] (Sample_ID, Year, SampleDate, Barcode) VALUES(" + Sample_ID + ",2019,'2019-02-19','"+Barcode+"')";
                 
                     statement.executeUpdate(Query);
                     counter++;                    

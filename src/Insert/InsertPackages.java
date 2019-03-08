@@ -34,21 +34,23 @@ public class InsertPackages {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("D:\\Soil Files\\2018\\Package info\\Hickory King.csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2018\\Report\\NUR_Cross_New_Pakhages 2018 (Harvest).csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
-                String Name = countCurrentLine.split(",")[1];
-                String OrgAccession = countCurrentLine.split(",")[3].replaceAll(" ", "");
-                String  No= countCurrentLine.split(",")[4];    
-                String Amount = countCurrentLine.split(",")[5];
-                //String Note = countCurrentLine.split(",")[6];      
+                String Name = countCurrentLine.split(",")[0];
+                //Cross Name
+                String Original_Name = countCurrentLine.split(",")[19];
+                String OrgAccession = countCurrentLine.split(",")[5].replaceAll(" ", "");
+                String  No= countCurrentLine.split(",")[2];    
+                //String Amount = countCurrentLine.split(",")[5];
+                String Note = countCurrentLine.split(",")[20];      
                 
                 String Query = "";
 
                 rs = statement.executeQuery("select ID from Pedigree where replace(Name,' ','') = replace('" + Name + "',' ','')");
                 if (rs.next()) {
                     String Pedigree_ID = rs.getString(1);
-                    Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Amount],[Original_Name],Discarded) VALUES(" + Pedigree_ID + ",4,'"+OrgAccession+"','2018-09-12',"+No+","+Amount+",'" + Name +"',0)";
+                    Query = "INSERT INTO [dbo].[Package1] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Amount],[Original_Name],Discarded) VALUES(" + Pedigree_ID + ",32,'"+OrgAccession+"','2019-02-18',"+No+",null,'" + Original_Name +"',0)";
                     //Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Amount],[Note],[Original_Name],Discarded) VALUES(" + Pedigree_ID + ",4,null,'2018-04-23',"+No+",null,'"+Note+"','" + Name +"',0)";
                     
                     System.out.println(Name + " inserted");

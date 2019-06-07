@@ -24,95 +24,110 @@ public class InsertPackageExperiment {
         ResultSet rs = null;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-VT6LQFU\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
+            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("E:\\2016 winter data\\Soil\\2017\\Package info\\Plains.csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2019\\Experiment plots\\2019 Experiment plots v4.csv"));
             int counter = 0;
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
-                String Name = countCurrentLine.split(",")[10].split("_")[0];
-                String Treatment = countCurrentLine.split(",")[10].split("_")[1];
-                String Note = countCurrentLine.split(",")[13];
-                String Plot = countCurrentLine.split(",")[8];
-                String Block = countCurrentLine.split(",")[6];
-                String No = countCurrentLine.split(",")[11];
-                String Year = "17";
-                String Location_code = countCurrentLine.split(",")[4];
-                String Location_Name = countCurrentLine.split(",")[3];
-                String ExperimentCode = countCurrentLine.split(",")[2];
-                String ExperimentType = countCurrentLine.split(",")[0];
+                String Destination = countCurrentLine.split(",")[10].replaceAll(" ", "");
+                String Rep = Destination.split("-")[2];
+                String Plot = Destination.split("-")[3];
+
+                String Origin = Destination.split("-")[0].substring(2, 4);
+                String ExperimentType = Destination.split("-")[1];
+                int SeedNo = Integer.parseInt(countCurrentLine.split(",")[11]);
+                String Note = countCurrentLine.split(",")[13];//+"-"+countCurrentLine.split(",")[13]+"- old ID ="+countCurrentLine.split(",")[15];               
+                
+                
+                String Original_Name = countCurrentLine.split(",")[3];
+                String Name = countCurrentLine.split(",")[3].replaceAll(" ", "");
+                String Year = "19";
+
                 //String Alias = countCurrentLine.split(",")[6];
                 int Pedigree_ID=0;
-                int Origin_ID=0;
-                int Block_ID=0;
-                int ExperimentType_ID=0;
+                int ExperimentType_ID = 0;
+                int Rep_ID = 0;
+                int Origin_ID = 0;
+                int Experiment_ID = 0;
+                int Plot_ID = 0; 
                 int Package_ID=0;
-                int Experiment_ID=0;
 
-                //Pedigree Selection
-                rs = statement.executeQuery("select ID from Pedigree1 where replace(Name,' ','') = replace('" + Name + "',' ','')");
+
+                //Pedigree Insertion
+                rs = statement.executeQuery("select ID from Pedigree where replace(Name,' ','') = replace('" + Name + "',' ','')");
                 if (rs.next()) {
                     Pedigree_ID = rs.getInt(1);
                 } else {
-//                    statement.executeUpdate("INSERT INTO [dbo].[Pedigree1] ([Name],[Alias1]) VALUES('" + Name.replaceAll(" ", "") + "','" + Alias.replaceAll(" ", "") + "' )");
-                    statement.executeUpdate("INSERT INTO [dbo].[Pedigree1] ([Name],[Alias1]) VALUES('" + Name.replaceAll(" ", "") + "',null )");
-                    rs = statement.executeQuery("select IDENT_CURRENT('Pedigree1')");
+                    statement.executeUpdate("INSERT INTO [dbo].[Pedigree] ([Name],[Alias1]) VALUES('" + Name + "','G2F' )");
+                    rs = statement.executeQuery("select IDENT_CURRENT('Pedigree')");
                     rs.next();
                     Pedigree_ID = rs.getInt(1);
                 }
 
-//                //ExperimentType Selection
-//                rs = statement.executeQuery("select ID from [ExperimentType] where replace(Code,' ','') = replace('" + ExperimentType + "',' ','')");
-//                if (rs.next()) {
-//                    Block_ID = rs.getInt(1);
-//                } else {
-//                    statement.executeUpdate("INSERT INTO [dbo].[[ExperimentType]] ([Code],[Name]) VALUES('" + Block.replaceAll(" ", "") + "','" + Block.replaceAll(" ", "") + "' )");
-//                    rs = statement.executeQuery("select IDENT_CURRENT('ExperimentType')");
-//                    rs.next();
-//                    ExperimentType_ID = rs.getInt(1);
-//                }
+                //Package Insertion
+                String Query = "INSERT INTO [dbo].[Package]  ([Pedigree_ID],[Box_ID],[Origin_ID],[Origin_Accession],[Date_In],[Date_Out],[Number],[Amount],[Note],[Original_Name],[Discarded],[ExperimentPlot_ID]) VALUES"
+                        + "(" + Pedigree_ID + ",null,12,'" + Name + "','2019-04-13',null," + SeedNo + ",null,null,'" + Original_Name + "',0, null)";               
                 
-                //Block1 Selection
-                rs = statement.executeQuery("select ID from Block1 where replace(Code,' ','') = replace('" + Block + "',' ','')");
-                if (rs.next()) {
-                    Block_ID = rs.getInt(1);
-                } else {
-                    statement.executeUpdate("INSERT INTO [dbo].[Block1] ([Code],[Name]) VALUES('" + ExperimentCode.replaceAll(" ", "") + "','" + ExperimentType.replaceAll(" ", "") + "' )");
-                    rs = statement.executeQuery("select IDENT_CURRENT('Block1')");
-                    rs.next();
-                    Block_ID = rs.getInt(1);
-                }
-
-//                //Origin1 Location_code
-//                rs = statement.executeQuery("select ID from Origin1 where replace(Code,' ','') = replace('" + Location_code + "',' ','')");
-//                if (rs.next()) {
-//                    Block_ID = rs.getInt(1);
-//                } else {
-//                    statement.executeUpdate("INSERT INTO [dbo].[Origin1] ([Code],[Name]) VALUES('" + Location_code.replaceAll(" ", "") + "','" + Location_Name.replaceAll(" ", "") + "' )");
-//                    rs = statement.executeQuery("select IDENT_CURRENT('Origin1')");
-//                    rs.next();
-//                    Origin_ID = rs.getInt(1);
-//                }
-
-                //Package selection
-                rs = statement.executeQuery("select ID from Package where replace(Code,' ','') = replace('" + Location_code + "',' ','')");
-                if (rs.next()) {
-                    Block_ID = rs.getInt(1);
-                } else {
-                    statement.executeUpdate("INSERT INTO [dbo].[Origin1] ([Code],[Name]) VALUES('" + Location_code.replaceAll(" ", "") + "','" + Location_Name.replaceAll(" ", "") + "' )");
-                    rs = statement.executeQuery("select IDENT_CURRENT('Origin1')");
-                    rs.next();
-                    Origin_ID = rs.getInt(1);
-                }
-                    
-
-                statement.executeUpdate("INSERT INTO [dbo].[Experiment1] ([ExperimentType_ID],[location_ID],[Plot],[Year],Block_ID,Note) VALUES(8,20," + Plot + ",17,"+Block_ID+",'"+Note+"')");
-                rs = statement.executeQuery("select IDENT_CURRENT('Experiment1')");
+                statement.executeUpdate(Query);
+                rs = statement.executeQuery("select IDENT_CURRENT('Package')");
                 rs.next();
-                Experiment_ID = rs.getInt(1);
-                    
-                statement.executeUpdate("INSERT INTO [dbo].[PackageWithdrawal1] ([Package_ID],[Experiment_ID],[Person_ID],[Date],[SeedRemove],Note) VALUES(" + Package_ID + "," + Experiment_ID + ",1,'2016-04-01',100,'"+Treatment+"')");
+                Package_ID = rs.getInt(1);
+                
+                // Origin
+                rs = statement.executeQuery("select ID from Origin where code = '" + Origin + "'");
+                if (rs.next()) {
+                    Origin_ID = rs.getInt(1);
+                    //ExperimentType
+                    rs = statement.executeQuery("select ID from ExperimentType where code = '" + ExperimentType + "'");
+                    if (rs.next()) {
+                        ExperimentType_ID = rs.getInt(1);
+                        //Plot
+                        rs = statement.executeQuery("select ID from Plot where Plot = '" + Plot + "'");
+                        if (rs.next()) {
+                            Plot_ID = rs.getInt(1);
+                            //Treatment
+//                            rs = statement.executeQuery("select ID from Treatment where Name = '" + Treatment + "'");
+//                            if (rs.next()) {
+//                                Treatment_ID = rs.getInt(1);                                
+                                    //Rep
+                                    rs = statement.executeQuery("select ID from Rep where code = '" + Rep + "'");
+                                    //Insert Experiment
+                                    if (rs.next()) {
+                                        Rep_ID = rs.getInt(1);
+                                        //statement.executeUpdate("INSERT INTO [dbo].[ExperimentDetails1] ([ExperimentType_ID],[location_ID],[Rep_ID],[Plot_ID],[Year],[Note],Treatment_ID) VALUES(" + ExperimentType_ID + "," + Origin_ID + "," + Rep_ID + ",'" + Plot_ID + "',19,'" + Note + "',null)");
+                                        String q = "select ID from Rep where ExperimentType_ID = "+ ExperimentType_ID + ",location_ID = " + Origin_ID + ",Rep_ID = " + Rep_ID + ",Plot_ID = '" + Plot_ID + "',Year = 19";
+                                        rs = statement.executeQuery("select ID from ExperimentDetails where ExperimentType_ID = "+ ExperimentType_ID + " and location_ID = " + Origin_ID + " and Rep_ID = " + Rep_ID + " and Plot_ID = '" + Plot_ID + "' and Year = 19");
+                                        if (rs.next()) 
+                                            Experiment_ID = rs.getInt(1);
+                                        else{ 
+                                            statement.executeUpdate("INSERT INTO [dbo].[ExperimentDetails] ([ExperimentType_ID],[location_ID],[Rep_ID],[Plot_ID],[Year],[Note],Treatment_ID) VALUES(" + ExperimentType_ID + "," + Origin_ID + "," + Rep_ID + ",'" + Plot_ID + "',19,null,null)");
+                                            Experiment_ID =0;
+                                        }
+                                    } else {
+                                        //statement.executeUpdate("INSERT INTO [dbo].[ExperimentDetails1] ([ExperimentType_ID],[location_ID],[Rep_ID],[Plot_ID],[Year],[Note],Treatment_ID) VALUES(" + ExperimentType_ID + "," + Origin_ID + ",Null,'" + Plot_ID + "',17,'" + Note + "',null)");
+                                    }
+                                    counter++;
+                                    //Experiment
+                                    if (Experiment_ID == 0){
+                                        rs = statement.executeQuery("select IDENT_CURRENT('ExperimentDetails')");
+                                        if (rs.next()) 
+                                            Experiment_ID = rs.getInt(1);
+                                    }   
+                                    
+                                    String Q = "INSERT INTO [dbo].[ExperimentPlot] ([Package_ID],[Out_ID],[ExperimentDetails_ID],[Person_ID],[Date],[SeedRemove],[Note]) VALUES(" + Package_ID + ",null," + Experiment_ID + ",3,'2019-04-15'," + SeedNo + ",'" + Note + "')";
+                                    statement.executeUpdate(Q);
+
+                        } else {
+                            System.out.println("There is no record with " + Plot);
+                        }
+                    } else {
+                        System.out.println("There is no record with " + ExperimentType);
+                    }
+                } else {
+                    System.out.println("There is no record with " + Origin);
+                }
                 counter++;               
 
             }

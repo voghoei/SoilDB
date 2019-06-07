@@ -27,7 +27,7 @@ public class InsertPackages_HaveFieldBookID {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= CAGT-SAHAR-D\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-           br = new BufferedReader(new FileReader("D:\\Soil Files\\2018\\Report\\NUR_Cross_New_Pakhages 2018 (Harvest).csv"));
+           br = new BufferedReader(new FileReader("D:\\Soil Files\\2018\\Report\\18GH_HMC_NewPackages.csv"));
            br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
                 String  Pedigree_ID = countCurrentLine.split(",")[12];//"294";
@@ -39,9 +39,9 @@ public class InsertPackages_HaveFieldBookID {
                 String  Query = "";
                 
                 if (Note.length()>0)
-                    Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded], [Note]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2018-10-29','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0 ,'"+Note+"')";
+                    Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded], [Note]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2018-02-21','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0 ,'"+Note+"')";
                 else                            
-                    Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2018-10-29','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0)";
+                    Query = "INSERT INTO [dbo].[Package] ([Pedigree_ID],[Origin_ID],[Origin_Accession],[Date_In],[Number],[Original_Name],[ExperimentPlot_ID],[Discarded]) VALUES(" + Pedigree_ID + ",9,'" + Origin_Accession + "','2019-02-21','"+No+"','" + Original_Name +"',"+ExperimentPlot_ID+" , 0)";
                 
                 statement.executeUpdate(Query);   
                 System.out.println(counter + " Rows Data Inserted "+ExperimentPlot_ID);

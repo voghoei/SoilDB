@@ -35,7 +35,7 @@ public class InsertFieldBook {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; instance= DESKTOP-8SM3HF1\\SQLEXPRESS;databaseName=Soil;integratedSecurity=true");
             Statement statement = conn.createStatement();
 
-            br = new BufferedReader(new FileReader("D:\\Soil Files\\2018\\FieldBook\\2018_NUR_Crosses_SeedCount.csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2018\\FieldBook\\2018_GH_Crosses_seedCount.csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
                 String FieldMap_ID = countCurrentLine.split(",")[0];

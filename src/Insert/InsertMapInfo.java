@@ -22,7 +22,7 @@ import java.sql.Statement;
  */
 public class InsertMapInfo {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         String countCurrentLine;
         BufferedReader br = null;
         ResultSet rs = null;
@@ -33,29 +33,24 @@ public class InsertMapInfo {
             Statement statement = conn.createStatement();
             String Query = "";
 
-            br = new BufferedReader(new FileReader("D:\\Soil Files\\2017\\Harvest\\2017 Corn Jason Wallace Yield Data - Joe Knoll (Tifton).csv"));
+            br = new BufferedReader(new FileReader("D:\\Soil Files\\2019\\Maps\\MMH.csv"));
             br.readLine();
             while ((countCurrentLine = br.readLine()) != null) {
-                String ExperimentPlot_ID = countCurrentLine.split(",")[18].replaceAll(" ", "");
-                String Row = countCurrentLine.split(",")[4].replaceAll(" ", "");
-                String Range = countCurrentLine.split(",")[3].replaceAll(" ", "");
-                //String Block = countCurrentLine.split(",")[2].replaceAll(" ", "");
+                String ExperimentPlot_ID = countCurrentLine.split(",")[0].replaceAll(" ", "");
+                String Row = countCurrentLine.split(",")[3].replaceAll(" ", "");
+                String Range = countCurrentLine.split(",")[4].replaceAll(" ", "");
+                String Block = countCurrentLine.split(",")[2].replaceAll(" ", "");
+                String subBlock = countCurrentLine.split(",")[5].replaceAll(" ", "");
 //                String Lat = countCurrentLine.split(",")[1].replaceAll(" ", "");
 //                String Long = countCurrentLine.split(",")[2].replaceAll(" ", "");
 //                String Note = countCurrentLine.split(",")[3].replaceAll(" ", "");
-                //  rs = statement.executeQuery("select [PackageWithdrawal_ID] from View_PackageWithdrawal_ForMap where replace([Code],' ','')='" + Code + "' ");
-                //  if (rs.next()) {
-                //      String PackageWithdrawal_ID = rs.getString(1);
-//                if (Note.length() > 1) {
-//                    Query = "insert into FieldMap(ExperimentPlot_ID,Row,Range, Note) values (" + ExperimentPlot_ID + ", " + Row + "," + Range + ",'" + Note + "')";
-//                } else {
-//                    Query = "insert into FieldMap(ExperimentPlot_ID,Row,Range,Block) values (" + ExperimentPlot_ID + ", " + Row + "," + Range + "," + Block + ")";
-                    Query = "insert into FieldMap(ExperimentPlot_ID,Row,Range) values (" + ExperimentPlot_ID + ", " + Row + "," + Range + ")";
-//                
-//                }
-//                     String Query = "insert into FieldMap(PackageWithdrawal_ID,Row,Range,GPS_Lat,GPS_Long) values ("+PackageWithdrawal_ID+", "+Row+","+Range+","+Lat+","+Long+")";
-                statement.executeUpdate(Query);
-                counter++;
+                  rs = statement.executeQuery("select max(ID)+1 from FieldMap");
+                  if (rs.next()) {
+                        int ID = rs.getInt(1);
+                        Query = "insert into FieldMap(ID,ExperimentPlot_ID,Row,Range, Block, SubBlock) values ("+ID+"," + ExperimentPlot_ID + ", " + Row + "," + Range + ",'" + Block + "','" + subBlock + "')";
+                        statement.executeUpdate(Query);
+                        counter++;
+                  }
                 // } else {
                 //System.out.println(" Package Does not exist Code: " + Code);
                 //  }
